@@ -152,6 +152,7 @@ const useKeyHandler = (
         const ctrlAltCombo = Keyboard.cmdOrCtrlPressed(e, true) && e.altKey;
         const shiftAltCombo = !Keyboard.cmdOrCtrlPressed(e) && e.shiftKey && e.altKey;
         const ctrlShiftCombo = Keyboard.cmdOrCtrlPressed(e, true) && e.shiftKey;
+        const tabKeyPressed = !Keyboard.cmdOrCtrlPressed(e) && !e.altKey && !e.shiftKey && e.key == "Tab";
 
         // fix for FF not capturing the paste without formatting event when using ctrl|cmd + shift + v
         if (e.key === KeyCodes.V[0] && ctrlOrMetaKeyPressed) {
@@ -315,6 +316,9 @@ const useKeyHandler = (
                 e.preventDefault();
                 toggleEmojiPicker();
             }
+        } else if (tabKeyPressed && caretIsWithinCodeBlock) {
+            e.preventDefault();
+            document.execCommand('insertText', false, "\t");            
         }
 
         const lastMessageReactionKeyCombo = ctrlShiftCombo && Keyboard.isKeyPressed(e, KeyCodes.BACK_SLASH);
